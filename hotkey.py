@@ -1,18 +1,25 @@
 from pynput import keyboard
+from pynput.keyboard import Controller, Key
+import lorem
+
+c = Controller()
+
+print('Programa em execução. Utilize o comando CTRL + ALT + L + I para gerar um parágrafo de "Lorem Ipsum"')
 
 
-def on_activate():
-    print('Global hotkey activated!')
+def newLorem():
+
+    c.release(Key.ctrl)
+    c.release(Key.alt)
+    c.release('l')
+    c.release('i')
+
+    c.type(lorem.paragraph())
 
 
-def for_canonical(f):
-    return lambda k: f(l.canonical(k))
-
-
-hotkey = keyboard.HotKey(
-    keyboard.HotKey.parse('<ctrl>+<alt>+l+i'),
-    on_activate)
-with keyboard.Listener(
-        on_press=for_canonical(hotkey.press),
-        on_release=for_canonical(hotkey.release)) as l:
-    l.join()
+with keyboard.GlobalHotKeys(
+        {
+            '<ctrl>+<alt>+l+i': newLorem,
+        }
+) as h:
+    h.join()
